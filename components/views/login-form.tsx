@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
 
 import { useState } from "react";
+import { useForm } from 'react-hook-form';
 import { signIn } from "next-auth/react";
 
 export function LoginForm({
@@ -15,35 +16,34 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
 
+  const { register, handleSubmit, setValue, trigger, watch, formState: { errors } } = useForm();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('')
+  // const [error, setError] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (data: any) => {
+    // e.preventDefault();
     setLoading(true);
-    setError("");
-
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    // setError("");
+    console.log('data', data);
+    // const formData = new FormData(e.currentTarget);
+    // const email = formData.get("email") as string;
+    // const password = formData.get("password") as string;
 
     try {
       const result = await signIn("credentials", {
-        email,
-        password,
+        'email': data.email,
+        'password': data.password,
         redirect: false
       });
-
-      // const result = await handleCredentialsSignin({ email, password });
 
       if (result?.error) {
         console.log('login result', result.error);
         switch (result.error) {
           case 'CredentialsSignin':
-            setError('Invalid credentials');
+            // setError('Invalid credentials');
             break;
           default:
-            setError('Something went wrong');
+          // setError('Something went wrong');
         }
       } else
         window.location.href = "/dashboard";
@@ -62,7 +62,7 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
+          <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)} >
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -73,12 +73,11 @@ export function LoginForm({
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
-                  id="email"
                   type="email"
-                  name="email"
                   placeholder="m@example.com"
-                  required
+                  {...register("email", { required: "Email address is required", pattern: { value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, message: "Invalid email format" } })}
                 />
+                {errors.email && <Label className="text-xs text-red-500">{`${errors.email.message}`}</Label>}
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -90,10 +89,12 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" name="password" type="password" required />
-                {error && <Label className="text-center text-red-500">{error}</Label>}
+                <Input
+                  type="password"
+                  {...register("password", { required: "Password is required" })} />
+                {errors.password && <Label className="text-xs text-red-500">{`${errors.password.message}`}</Label>}
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {loading ? 'Please wait' : 'Login'}
               </Button>
