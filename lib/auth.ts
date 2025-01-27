@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import axios from "@/lib/axios";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
    providers: [
@@ -10,22 +11,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             password: { label: "Password", type: "password" },
          },
          async authorize(credentials) {
-            const response = await fetch("http://localhost:3000/api/login", {
-               method: "POST",
-               headers: {
-                  "Content-Type": "application/json",
-               },
-               body: JSON.stringify({
-                  email: credentials?.email,
-                  password: credentials?.password,
-               }),
-            });
-
-            if (!response.ok)
-               return null;
-
-            const user = await response.json();
-            return user;
+            const body = {
+               email: credentials?.email,
+               password: credentials?.password,
+            }
+            try {
+               const response = await axios.post("/api/login", body);
+               if (response.status == 200) {
+                  const user = await response.data;
+                  return user;
+               }
+            } catch (error) { }
+            return null;
          }
       })
    ],

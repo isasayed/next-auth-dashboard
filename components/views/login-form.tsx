@@ -24,7 +24,6 @@ export function LoginForm({
 
   const { register, handleSubmit, setError, formState: { errors } } = useForm<LoginFormData>();
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState('')
 
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
@@ -62,7 +61,7 @@ export function LoginForm({
                 <Label htmlFor="email">Email</Label>
                 <Input
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="demo@gmail.com"
                   {...register("email", { required: "Email address is required", pattern: { value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, message: "Invalid email format" } })}
                 />
                 {errors.email && <Label className="text-xs text-red-500">{`${errors.email.message}`}</Label>}
@@ -79,6 +78,7 @@ export function LoginForm({
                 </div>
                 <Input
                   type="password"
+                  placeholder="demo123"
                   {...register("password", { required: "Password is required" })} />
                 {errors.password && <Label className="text-xs text-red-500">{`${errors.password.message}`}</Label>}
               </div>
