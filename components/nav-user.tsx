@@ -29,7 +29,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { useRouter } from "next/navigation"
 import { User } from "next-auth"
 import { getAvatarName } from "@/lib/utils"
 import { handleSignOut } from "@/app/actions/authActions"

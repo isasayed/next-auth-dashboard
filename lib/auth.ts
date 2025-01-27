@@ -21,7 +21,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                   const user = await response.data;
                   return user;
                }
-            } catch (error) { }
+            } catch (error) {
+               console.error('Error:', error instanceof Error ? error.message : 'Unknown error');
+             }
             return null;
          }
       })
