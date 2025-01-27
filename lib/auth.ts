@@ -1,10 +1,9 @@
-import { getServerSession } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
-const authOptions: NextAuthOptions = {
+export const { handlers, signIn, signOut, auth } = NextAuth({
    providers: [
-      CredentialsProvider({
+      Credentials({
          name: "Credentials",
          credentials: {
             email: { label: "Email", type: "email" },
@@ -31,6 +30,20 @@ const authOptions: NextAuthOptions = {
       })
    ],
    callbacks: {
+      authorized({ request: { nextUrl }, auth }) {
+         const isLoggedIn = !!auth?.user;
+         const { pathname } = nextUrl;
+         if (isLoggedIn) {
+            if (pathname.startsWith('/login')) {
+               return Response.redirect(new URL('/dashboard', nextUrl));
+            }
+         } else {
+            if (!pathname.startsWith('/login')) {
+               return Response.redirect(new URL('/login', nextUrl));
+            }
+         }
+         return !!auth;
+      },
       async session({ session, token }) {
          // Add custom fields to the session object
          session.user.name = token.name;
@@ -54,10 +67,4 @@ const authOptions: NextAuthOptions = {
    pages: {
       signIn: "/login"
    }
-}
-
-// const handler = NextAuth(authOptions);
-// export { handler as GET, handler as POST };
-const getSession = () => getServerSession(authOptions)
-
-export { authOptions, getSession }
+});

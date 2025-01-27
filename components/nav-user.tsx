@@ -29,23 +29,17 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { User } from "next-auth"
 import { getAvatarName } from "@/lib/utils"
+import { handleSignOut } from "@/app/actions/authActions"
 
 export function NavUser({
   user,
 }: {
   user: User
 }) {
-  const router = useRouter();
   const { isMobile } = useSidebar()
-
-  const handleSignOut = async () => {
-    await signOut({ redirect: false }); // Sign out without automatic redirect
-    router.push("/login"); // Redirect to the login page manually
-  };
 
   return (
     <SidebarMenu>

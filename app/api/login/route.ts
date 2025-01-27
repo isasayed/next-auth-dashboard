@@ -4,7 +4,6 @@ export async function POST(request: NextRequest) {
    const { email, password } = await request.json();
 
    try {
-      console.log('/login api request ', email, password);
       if (email == 'demo@gmail.com' && password == 'demo123') {
          return NextResponse.json({
             id: 1,

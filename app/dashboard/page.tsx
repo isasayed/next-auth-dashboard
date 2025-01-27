@@ -4,11 +4,10 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
-
-import { getSession } from "@/lib/auth";
+import { auth } from "@/lib/auth"
 
 export default async function Page() {
-  const session = await getSession()
+  const session = await auth();
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4">

@@ -19,7 +19,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { getSession } from "@/lib/auth"
+import { auth } from "@/lib/auth"
 
 // This is sample data.
 const data = {
@@ -80,7 +80,7 @@ const data = {
 }
 
 export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const session = await getSession();
+  const session = await auth();
 
   return (
     <Sidebar {...props}>

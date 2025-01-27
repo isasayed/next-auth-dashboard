@@ -43,9 +43,9 @@ export default function Home() {
                 Support
               </a>
 
-              <a href="#" title="Login" className={linkClasses}>
+              <Link href="login" title="Login" className={linkClasses}>
                 Login
-              </a>
+              </Link>
 
               <a
                 href="https://github.com/isasayed/next-auth-dashboard"

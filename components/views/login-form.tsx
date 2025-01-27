@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react"
 
 import { useState } from "react";
 import { useForm } from 'react-hook-form';
-import { signIn } from "next-auth/react";
+import { handleCredentialsSignin } from "@/app/actions/authActions";
 import Image from "next/image";
 
 interface LoginFormData {
@@ -30,24 +30,12 @@ export function LoginForm({
     setLoading(true);
 
     try {
-      const result = await signIn("credentials", {
-        'email': data.email,
-        'password': data.password,
-        redirect: false
-      });
-
-      if (result?.error) {
-        console.log('login result', result.error);
-        switch (result.error) {
-          case 'CredentialsSignin':
-            setError("password", { message: "Invalid credentials" });
-            break;
-          default:
-            setError("password", { message: "Something went wrong" });
-        }
-      } else
-        window.location.href = "/dashboard";
+      const result = await handleCredentialsSignin({ email: data.email, password: data.password });
+      if (result?.message) {
+        setError("password", { message: result.message });
+      }
     } catch (err) {
+      setError("password", { message: "Something went wrong" });
       if (err instanceof Error) {
         console.log(err.message);
       } else {
