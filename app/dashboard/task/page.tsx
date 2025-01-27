@@ -10,25 +10,11 @@ import {
 } from "@/components/ui/breadcrumb"
 
 import { useSession } from "next-auth/react"
-import { useEffect } from "react";
 
 import AuthGuard from "@/lib/route-guard/AuthGuard";
 
 export default function Page() {
-   const { data: session, status } = useSession();
-
-   // useEffect(() => {
-   //    console.log('session', session);
-
-   // }, [session]);
-
-   // if (status === "loading") {
-   //    return <p>Loading...</p>
-   // }
-
-   // if (status === "unauthenticated") {
-   //    return <p>Access Denied</p>
-   // }
+   const { data: session } = useSession();
 
    return (
       <AuthGuard>

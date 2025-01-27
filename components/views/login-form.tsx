@@ -10,24 +10,24 @@ import { Loader2 } from "lucide-react"
 import { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { signIn } from "next-auth/react";
+import Image from "next/image";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
 
-  const { register, handleSubmit, setValue, trigger, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, setError, formState: { errors } } = useForm<LoginFormData>();
   const [loading, setLoading] = useState(false);
   // const [error, setError] = useState('')
 
-  const onSubmit = async (data: any) => {
-    // e.preventDefault();
+  const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
-    // setError("");
-    console.log('data', data);
-    // const formData = new FormData(e.currentTarget);
-    // const email = formData.get("email") as string;
-    // const password = formData.get("password") as string;
 
     try {
       const result = await signIn("credentials", {
@@ -40,10 +40,10 @@ export function LoginForm({
         console.log('login result', result.error);
         switch (result.error) {
           case 'CredentialsSignin':
-            // setError('Invalid credentials');
+            setError("password", { message: "Invalid credentials" });
             break;
           default:
-          // setError('Something went wrong');
+            setError("password", { message: "Something went wrong" });
         }
       } else
         window.location.href = "/dashboard";
@@ -141,10 +141,12 @@ export function LoginForm({
             </div>
           </form>
           <div className="relative hidden bg-muted md:block">
-            <img
+            <Image
               src="https://ui.shadcn.com/placeholder.svg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              width={100}
+              height={100}
             />
           </div>
         </CardContent>
