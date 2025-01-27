@@ -1,15 +1,3 @@
-// import { withAuth } from "next-auth/middleware";
-
-// export default withAuth({
-//   pages: {
-//     signIn: "/login", // Redirect to this page if not authenticated
-//   },
-// });
-
-// export const config = {
-//   matcher: ["/dashboard/:path*"], // Protect all routes under /dashboard
-// };
-
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
@@ -24,7 +12,7 @@ export async function middleware(req: any) {
   }
 
   // Protect dashboard route for unauthenticated users
-  if (!session && pathname.includes("/dashboard")) {
+  if (!session && pathname === "/dashboard") {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 

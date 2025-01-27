@@ -1,8 +1,8 @@
 import * as React from "react"
 import {
   Command,
+  Home,
   LifeBuoy,
-  Map,
   Send,
   Settings2,
 } from "lucide-react"
@@ -19,6 +19,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { getSession } from "@/lib/auth"
 
 // This is sample data.
 const data = {
@@ -29,27 +30,19 @@ const data = {
   },
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: Map,
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: Home,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Tasks",
+          url: "/dashboard/task",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "Settings - dummy",
       url: "#",
       icon: Settings2,
       items: [
@@ -86,7 +79,9 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const session = await getSession();
+
   return (
     <Sidebar {...props}>
       <SidebarHeader className="h-16 border-sidebar-border">
@@ -111,7 +106,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <NavSecondary items={data.navSecondary} />
-        <NavUser user={data.user} />
+        {session && session.user &&
+          <NavUser user={session.user} />
+        }
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

@@ -1,7 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { getSession } from "@/lib/auth";
 import { ModeToggle } from "@/components/theme-toggle";
 
 export default async function RootLayout({
@@ -9,12 +8,10 @@ export default async function RootLayout({
 }: Readonly<{
    children: React.ReactNode;
 }>) {
-   const session = await getSession();
 
    return (
       <html lang="en">
          <body >
-            {/* {session && session.user && */}
             <SidebarProvider>
                <AppSidebar />
                <SidebarInset>
@@ -30,7 +27,6 @@ export default async function RootLayout({
                   {children}
                </SidebarInset>
             </SidebarProvider>
-            {/* } */}
          </body>
       </html>
    );

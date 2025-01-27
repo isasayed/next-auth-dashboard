@@ -8,8 +8,7 @@ import {
 import { getSession } from "@/lib/auth";
 
 export default async function Page() {
-  const session = await getSession();
-  console.log('session', session);
+  const session = await getSession()
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4">
@@ -22,9 +21,7 @@ export default async function Page() {
       </Breadcrumb>
       <h1 className="text-lg font-semibold md:text-2xl">Dashboard</h1>
       <div className="grid auto-rows-min gap-4 md:grid-cols-5">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <div key={i} className="aspect-square rounded-xl bg-muted/50" />
-        ))}
+        {session && session.user && <>{session.user.name}</>}
       </div>
     </div>
   )
